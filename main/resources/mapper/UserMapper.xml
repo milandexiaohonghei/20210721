@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.example.demo.model.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="photo" property="photo"/>
+        <collection property="alist" columnPrefix="a_"
+                    resultMap="com.example.demo.mapper.ArticleInfoMapper.BaseResultMap">
+        </collection>
+
+    </resultMap>
+    <insert id="addUser" parameterType="com.example.demo.model.User">
+        insert into userinfo(username,password,photo)
+        values(
+            #{username},#{password},#{photo}
+        )
+    </insert>
+    <delete id="delByIdInt" parameterType="java.lang.Integer">
+        delete from userinfo wherre id = #{id}
+    </delete>
+
+    <select id="getUserById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from userinfo where id = #{id}
+    </select>
+
+    <select id="getUserByNameAndPassword" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from userinfo where username=#{username} and password=#{password}
+    </select>
+    <select id="getAll" resultType="com.example.demo.model.User">
+
+    </select>
+    <select id="getFullUser" resultMap="BaseResultMap">
+        select u.*,a.id a_id,a.title a_title,a.content a_content,a.createtime a_createtime from userinfo u
+            left join articleinfo a on u.id=a.uid where u.id=#{id}
+    </select>
+
+
+</mapper>
